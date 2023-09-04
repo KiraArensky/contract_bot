@@ -19,11 +19,25 @@ def support(bot, message, cur, con):
     msg = bot.send_message(message.chat.id, text="Выбери свою категорию:", reply_markup=markup)
     cur.execute(
         f'''UPDATE id SET back = {msg.id} WHERE id = {message.chat.id} ''')
+    cur.execute(
+        f'''UPDATE id SET post_number = 0 WHERE id = {message.chat.id} ''')
     con.commit()
 
 
 def how_join(bot, message, cur, con):
     msg = bot.send_message(message.chat.id, text="Информация о том, как поступить на службу")
+    cur.execute(
+        f'''UPDATE id SET back = {msg.id} WHERE id = {message.chat.id} ''')
+    con.commit()
+
+
+def change_city(bot, message, cur, con):
+    markup = types.InlineKeyboardMarkup()  # cоздание inline кнопок
+    btn1 = types.InlineKeyboardButton("Нефтеюганский район", callback_data='nefteyugansk')
+    btn2 = types.InlineKeyboardButton("Другая территория", callback_data='other')
+    markup.row(btn1, btn2)
+
+    msg = bot.send_message(message.chat.id, text="Выбери регион", reply_markup=markup)
     cur.execute(
         f'''UPDATE id SET back = {msg.id} WHERE id = {message.chat.id} ''')
     con.commit()
