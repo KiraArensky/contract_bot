@@ -156,26 +156,26 @@ def callback(call):
             if call.data[:8] == "sup_back":
                 post_txt = open(f'database/posts/sup_{call.data[-1]}.txt', encoding="utf8").readlines()
                 if n == 0:
-                    n = len(post_txt) - 1
+                    n = len(post_txt) - 2
                 else:
-                    n -= 1
+                    n -= 2
 
                 cur.execute(
                     f'''UPDATE id SET post_number = {n} WHERE id = {call.message.chat.id} ''')
                 con.commit()
 
                 msg = bot.send_message(call.message.chat.id,
-                                       text=f'{post_txt[n]}', reply_markup=markup)
+                                       text=f'{post_txt[n]}\n\n{post_txt[n + 1]}', reply_markup=markup, parse_mode='HTML')
             elif call.data[:8] == "sup_next":
                 post_txt = open(f'database/posts/sup_{call.data[-1]}.txt', encoding="utf8").readlines()
 
-                if n == len(post_txt) - 1:
+                if n == len(post_txt) - 2:
                     n = 0
                 else:
-                    n += 1
+                    n += 2
 
                 msg = bot.send_message(call.message.chat.id,
-                                       text=f'{post_txt[n]}', reply_markup=markup)
+                                       text=f'{post_txt[n]}\n\n{post_txt[n + 1]}', reply_markup=markup, parse_mode='HTML')
 
                 cur.execute(
                     f'''UPDATE id SET post_number = {n} WHERE id = {call.message.chat.id} ''')
@@ -184,7 +184,7 @@ def callback(call):
             else:
                 post_txt = open(f'database/posts/{call.data}.txt', encoding="utf8").readlines()
                 msg = bot.send_message(call.message.chat.id,
-                                       text=f'{post_txt[n]}', reply_markup=markup)
+                                       text=f'{post_txt[n]}\n\n{post_txt[n + 1]}', reply_markup=markup, parse_mode='HTML')
 
             cur.execute(
                 f'''UPDATE id SET back = {msg.id} WHERE id = {call.message.chat.id} ''')
